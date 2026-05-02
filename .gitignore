@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.idea/
+.vscode/
+*.log
+# Local state / test files (default is outside repo under LOCALAPPDATA)
+state.json
+*.lock

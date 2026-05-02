@@ -24,8 +24,17 @@ function Find-Python {
 
 $py = Find-Python
 $script = Join-Path $Root "report_task.py"
+# Omit --message when empty: PowerShell otherwise leaves --message without a value and argparse fails.
 if ($Task) {
-    & $py $script --session $Session --task $Task --status $Status --title $Title --message $Message
+    if ($Message) {
+        & $py $script --session $Session --task $Task --status $Status --title $Title --message $Message
+    } else {
+        & $py $script --session $Session --task $Task --status $Status --title $Title
+    }
 } else {
-    & $py $script --session $Session --status $Status --title $Title --message $Message
+    if ($Message) {
+        & $py $script --session $Session --status $Status --title $Title --message $Message
+    } else {
+        & $py $script --session $Session --status $Status --title $Title
+    }
 }

@@ -46,10 +46,11 @@ class StatusPanelApp:
         body = ttk.Frame(self.root, padding=(6, 0, 6, 6))
         body.pack(fill=tk.BOTH, expand=True)
 
-        cols = ("sessionId", "taskId", "title", "status", "updatedAt", "lastMessage")
+        cols = ("workspace", "sessionId", "taskId", "title", "status", "updatedAt", "lastMessage")
         self.tree = ttk.Treeview(body, columns=cols, show="headings", height=14)
         headings = {
-            "sessionId": "会话",
+            "workspace": "工作区",
+            "sessionId": "会话(conversation)",
             "taskId": "任务ID",
             "title": "标题",
             "status": "状态",
@@ -57,12 +58,13 @@ class StatusPanelApp:
             "lastMessage": "最后消息",
         }
         widths = {
+            "workspace": 100,
             "sessionId": 120,
-            "taskId": 140,
-            "title": 200,
-            "status": 90,
-            "updatedAt": 160,
-            "lastMessage": 260,
+            "taskId": 100,
+            "title": 180,
+            "status": 80,
+            "updatedAt": 150,
+            "lastMessage": 220,
         }
         for c in cols:
             self.tree.heading(c, text=headings[c])
@@ -109,9 +111,11 @@ class StatusPanelApp:
 
         for t in tasks_sorted:
             key = t.key()
+            ws = (t.workspace or "")[:20]
             vals = (
-                t.sessionId[:16] + ("…" if len(t.sessionId) > 16 else ""),
-                t.taskId[:18] + ("…" if len(t.taskId) > 18 else ""),
+                ws,
+                t.sessionId[:14] + ("…" if len(t.sessionId) > 14 else ""),
+                t.taskId[:16] + ("…" if len(t.taskId) > 16 else ""),
                 t.title[:80],
                 t.status,
                 t.updatedAt,

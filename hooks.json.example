@@ -1,7 +1,31 @@
 {
   "version": 1,
   "hooks": {
+    "sessionStart": [
+      {
+        "command": "python \"D:/claude/cursor_notification/report_task.py\" --hook",
+        "timeout": 15
+      }
+    ],
+    "sessionEnd": [
+      {
+        "command": "python \"D:/claude/cursor_notification/report_task.py\" --hook",
+        "timeout": 15
+      }
+    ],
     "stop": [
+      {
+        "command": "python \"D:/claude/cursor_notification/report_task.py\" --hook",
+        "timeout": 15
+      }
+    ],
+    "subagentStart": [
+      {
+        "command": "python \"D:/claude/cursor_notification/report_task.py\" --hook",
+        "timeout": 15
+      }
+    ],
+    "subagentStop": [
       {
         "command": "python \"D:/claude/cursor_notification/report_task.py\" --hook",
         "timeout": 15

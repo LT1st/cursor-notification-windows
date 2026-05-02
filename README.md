@@ -43,7 +43,7 @@ python status_panel.py --poll 500 --state "%LOCALAPPDATA%\cursor_notification\da
 
 窗口内 **「清空已完成」** 会删除状态里所有 `FINISHED` / `ERROR` / `FAILED` 记录。
 
-## 方式 A：Cursor `stop` Hook（推荐）
+## 方式 A：Cursor Hooks（推荐）
 
 1. 复制 [hooks.json.example](hooks.json.example) 中内容到：
 
@@ -54,7 +54,9 @@ python status_panel.py --poll 500 --state "%LOCALAPPDATA%\cursor_notification\da
 
 3. 保存后可在 Cursor **Hooks** 设置/输出通道确认是否加载；必要时重启 Cursor。
 
-4. Hook 使用 **`stop`** 事件：Agent 结束时 Cursor 会把 JSON 写到子进程 stdin，由 `report_task.py --hook` 解析并更新状态、在到达终态时弹通知。
+4. 示例中已绑定 **`sessionStart` / `sessionEnd` / `stop` / `subagentStart` / `subagentStop`**（同一脚本、读 stdin）。这样每个 Composer 会话会在面板里占一行：**`conversation_id` + 固定 `composer`**，多窗口 / 多标签互不覆盖；`workspace_roots` 会显示在「工作区」列。
+
+5. 调试：设置环境变量 `CURSOR_NOTIFICATION_DEBUG=1` 后，每次 hook 会把原始 JSON 写到状态目录旁的 `last_hook.json`（便于核对 Cursor 实际下发的字段）。
 
 若 stdin 的 JSON 字段与当前 Cursor 版本不一致，脚本会尽量用默认值（详见 `report_task.py` 中 `_extract_from_hook`）。
 

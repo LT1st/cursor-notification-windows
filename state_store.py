@@ -36,6 +36,7 @@ class TaskRecord:
     finishedAt: Optional[str] = None
     lastMessage: str = ""
     updatedAt: str = ""
+    workspace: str = ""
 
     def key(self) -> str:
         return f"{self.sessionId}::{self.taskId}"
@@ -115,6 +116,7 @@ def tasks_from_state(data: Dict[str, Any]) -> List[TaskRecord]:
                     finishedAt=row.get("finishedAt"),
                     lastMessage=str(row.get("lastMessage") or ""),
                     updatedAt=str(row.get("updatedAt") or ""),
+                    workspace=str(row.get("workspace") or ""),
                 )
             )
         except (TypeError, ValueError):
@@ -129,6 +131,7 @@ def merge_task_update(
     title: str,
     status: str,
     last_message: str = "",
+    workspace: str = "",
 ) -> tuple[TaskRecord, bool, Optional[str]]:
     """
     Merge one task update. Returns (record, should_notify, previous_status or None).
@@ -154,6 +157,7 @@ def merge_task_update(
             if st in ("RUNNING", "CREATING", "WORKING", "IN_PROGRESS"):
                 finished = None
 
+        ws = (workspace or (prev.workspace if prev else "") or "").strip()
         rec = TaskRecord(
             sessionId=session_id,
             taskId=task_id,
@@ -163,6 +167,7 @@ def merge_task_update(
             finishedAt=finished,
             lastMessage=last_message or (prev.lastMessage if prev else "") or "",
             updatedAt=now,
+            workspace=ws,
         )
         tasks[key] = rec
 
